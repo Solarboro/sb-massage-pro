@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acn.masg.entity.MasgUser;
@@ -18,6 +22,7 @@ import com.acn.masg.entity.RevPanel;
 import com.acn.masg.entity.RevPanelItem;
 import com.acn.masg.repository.MasgUserRepo;
 import com.acn.masg.repository.ReservationRepo;
+import com.acn.masg.util.SearchConditions;
 
 @RestController
 @RequestMapping(value="/rev")
@@ -49,6 +54,30 @@ public class ReservationAPI implements APIMaster<Reservation> {
 		this.reservationRepo.delete(entity);
 	}
 	
+	@RequestMapping(value="/change/{status}",
+			method=RequestMethod.POST,
+			consumes="application/json")
+	public Reservation cancelEntity(@RequestBody Reservation entity, @PathVariable byte status) {
+		
+		if (status == 5)
+			entity.setRevComment(true);
+		else
+			entity.setRevStatus((byte) status);
+		
+		return this.reservationRepo.save(entity);
+	}
+	
+	//
+	
+	@RequestMapping(value="/2masg",
+			method=RequestMethod.GET,
+			consumes="application/json")
+	public List<Reservation> cancelEntity(@RequestParam String revMasg, String revDate) {
+
+		return this
+				.reservationRepo
+				.findByRevMasgAndRevDateOrderByRevTime(revMasg, revDate);
+	}
 	
 	//
 	@RequestMapping(value="/revpanel")
@@ -76,7 +105,7 @@ public class ReservationAPI implements APIMaster<Reservation> {
 						new HashMap<Integer, Reservation>();
 				for(Reservation reservation: 
 					this.reservationRepo
-					.findByRevMasgAndRevDateAndRevStatusOrderBySysDate(revMasg, revDate, (byte)1))
+					.findByRevMasgAndRevDateAndRevStatusOrderBySysDateDesc(revMasg, revDate, (byte)1))
 				{
 					//
 					reservationMap.put(Integer.valueOf((int) reservation.getRevTime()), reservation);
@@ -107,7 +136,7 @@ public class ReservationAPI implements APIMaster<Reservation> {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		maxDays = 5;
 		
@@ -123,6 +152,7 @@ public class ReservationAPI implements APIMaster<Reservation> {
 			if (calendar.get(Calendar.DAY_OF_WEEK) == 7 )
 				calendar.add(Calendar.DATE, 2);
 		
+			
 			revDateList.add(sdf.format(calendar.getTime()));
 			
 		}

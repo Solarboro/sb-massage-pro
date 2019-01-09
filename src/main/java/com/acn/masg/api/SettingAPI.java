@@ -14,7 +14,7 @@ import com.acn.masg.repository.setting.RevStatusRepo;
 
 @RestController
 @RequestMapping(value="/setting/map/")
-public class APITest {
+public class SettingAPI {
 	
 	@Autowired
 	private RevStatusRepo revStatusRepo;

@@ -11,5 +11,9 @@ public interface ReservationRepo extends MongoRepository<Reservation, ObjectId> 
 	List<Reservation> findByUid(String uid);
 	
 	// Rev Panel
-	List<Reservation> findByRevMasgAndRevDateAndRevStatusOrderBySysDate(String revMasg, String RevDate, byte revStatus);
+	List<Reservation> findByRevMasgAndRevDateAndRevStatusOrderBySysDateDesc(String revMasg, String RevDate, byte revStatus);
+	
+	// Masg Rev List
+	List<Reservation> findByRevMasgAndRevDateOrderByRevTime(String revMasg, String RevDate);
+	
 }
