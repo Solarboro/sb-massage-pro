@@ -9,4 +9,7 @@ import com.acn.masg.entity.Reservation;
 
 public interface ReservationRepo extends MongoRepository<Reservation, ObjectId> {
 	List<Reservation> findByUid(String uid);
+	
+	// Rev Panel
+	List<Reservation> findByRevMasgAndRevDateAndRevStatusOrderBySysDate(String revMasg, String RevDate, byte revStatus);
 }

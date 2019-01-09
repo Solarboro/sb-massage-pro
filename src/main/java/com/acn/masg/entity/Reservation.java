@@ -1,5 +1,7 @@
 package com.acn.masg.entity;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,72 +22,87 @@ public class Reservation {
 	private String revFloor;
 	private String revBuilding;
 	
-	private String sysDate;
-	private String sysTime;
+	private Date sysDate;
+
 	public ObjectId get_id() {
 		return _id;
 	}
+
 	public void set_id(ObjectId _id) {
 		this._id = _id;
 	}
+
 	public String getUid() {
 		return uid;
 	}
+
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+
 	public String getRevMasg() {
 		return revMasg;
 	}
+
 	public void setRevMasg(String revMasg) {
 		this.revMasg = revMasg;
 	}
+
 	public byte getRevStatus() {
 		return revStatus;
 	}
+
 	public void setRevStatus(byte revStatus) {
 		this.revStatus = revStatus;
 	}
+
 	public boolean isRevComment() {
 		return revComment;
 	}
+
 	public void setRevComment(boolean revComment) {
 		this.revComment = revComment;
 	}
+
 	public byte getRevTime() {
 		return revTime;
 	}
+
 	public void setRevTime(byte revTime) {
 		this.revTime = revTime;
 	}
+
 	public String getRevDate() {
 		return revDate;
 	}
+
 	public void setRevDate(String revDate) {
 		this.revDate = revDate;
 	}
+
 	public String getRevFloor() {
 		return revFloor;
 	}
+
 	public void setRevFloor(String revFloor) {
 		this.revFloor = revFloor;
 	}
+
 	public String getRevBuilding() {
 		return revBuilding;
 	}
+
 	public void setRevBuilding(String revBuilding) {
 		this.revBuilding = revBuilding;
 	}
-	public String getSysDate() {
+
+	public Date getSysDate() {
 		return sysDate;
 	}
-	public void setSysDate(String sysDate) {
+
+	public void setSysDate(Date sysDate) {
 		this.sysDate = sysDate;
 	}
-	public String getSysTime() {
-		return sysTime;
-	}
-	public void setSysTime(String sysTime) {
-		this.sysTime = sysTime;
-	}
+	
+	
 }

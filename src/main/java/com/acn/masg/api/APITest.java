@@ -34,6 +34,7 @@ public class APITest {
 	
 	}
 	
+	//
 	@RequestMapping(value="/revduration")
 	public Map<Integer, RevDuration> getRevDurationMap(){
 		Map<Integer, RevDuration> localMap = new HashMap<Integer, RevDuration>();
@@ -45,5 +46,6 @@ public class APITest {
 		return localMap;
 	
 	}
+
 
 }
