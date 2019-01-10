@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-@Configuration
+//@Configuration
 public class HttpsConfig {
 	
 	// http请求的端口,需要在application配置中添加http.port=端口号  如80
