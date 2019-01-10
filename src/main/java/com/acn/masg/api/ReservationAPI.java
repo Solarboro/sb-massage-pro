@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acn.masg.entity.MasgUser;
+import com.acn.masg.entity.MasgUserDetail;
 import com.acn.masg.entity.Reservation;
 import com.acn.masg.entity.RevPanel;
 import com.acn.masg.entity.RevPanelItem;
+import com.acn.masg.repository.MasgUserDetailRepo;
 import com.acn.masg.repository.MasgUserRepo;
 import com.acn.masg.repository.ReservationRepo;
 import com.acn.masg.util.SearchConditions;
@@ -29,6 +31,9 @@ import com.acn.masg.util.SearchConditions;
 public class ReservationAPI implements APIMaster<Reservation> {
 	@Autowired
 	private ReservationRepo reservationRepo;
+	
+	@Autowired
+	private MasgUserDetailRepo masgUserDetailRepo;
 	
 	@Autowired
 	private MasgUserRepo masgUserRepo;
@@ -45,7 +50,27 @@ public class ReservationAPI implements APIMaster<Reservation> {
 
 	@Override
 	public Reservation saveEntity(Reservation entity) {
+		// TODO Should move to service;
+		//  Set date
 		entity.setSysDate(new Date());
+		
+		// update UserDetial
+			MasgUserDetail masgUserDetail  = 
+					this
+					.masgUserDetailRepo
+					.findByUsername(entity.getUid());
+			Integer curMthRevTimes = masgUserDetail.getCurMthRevTimes();
+			
+			if(curMthRevTimes == null)
+				curMthRevTimes = 1;
+			else
+				curMthRevTimes++;
+			
+			masgUserDetail.setCurMthRevTimes(curMthRevTimes);
+			
+			this.masgUserDetailRepo.save(masgUserDetail);
+		
+		
 		return this.reservationRepo.save(entity);
 	}
 
@@ -58,12 +83,40 @@ public class ReservationAPI implements APIMaster<Reservation> {
 			method=RequestMethod.POST,
 			consumes="application/json")
 	public Reservation cancelEntity(@RequestBody Reservation entity, @PathVariable byte status) {
-		
+		// TODO Should move to service;
 		if (status == 5)
 			entity.setRevComment(true);
 		else
 			entity.setRevStatus((byte) status);
 		
+		// clean no show
+		if ( status == 2) {
+			MasgUserDetail masgUserDetail  = 
+					this
+					.masgUserDetailRepo
+					.findByUsername(entity.getUid());
+			
+			masgUserDetail.setRevBlocked(false);
+			masgUserDetail.setRevBlockedDate("");
+			masgUserDetail.setRevReleaseDate("");
+			
+			this.masgUserDetailRepo.save(masgUserDetail);
+		}
+		
+		// no show
+		if ( status == 3) {
+			MasgUserDetail masgUserDetail  = 
+					this
+					.masgUserDetailRepo
+					.findByUsername(entity.getUid());
+			
+			masgUserDetail.setRevBlocked(true);
+			masgUserDetail.setRevBlockedDate("YYYY-MM");
+			masgUserDetail.setRevReleaseDate("YYYY-(MM+2)");
+			
+			this.masgUserDetailRepo.save(masgUserDetail);
+		}
+
 		return this.reservationRepo.save(entity);
 	}
 	
