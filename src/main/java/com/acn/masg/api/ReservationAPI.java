@@ -96,6 +96,8 @@ public class ReservationAPI implements APIMaster<Reservation> {
 					.masgUserDetailRepo
 					.findByUsername(entity.getUid());
 			
+			System.out.println(entity.getUid());
+			
 			masgUserDetail.setRevBlocked(false);
 			masgUserDetail.setRevBlockedDate("");
 			masgUserDetail.setRevReleaseDate("");
