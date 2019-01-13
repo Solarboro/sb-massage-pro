@@ -11,7 +11,7 @@ public class DefaultRootMapping extends WebMvcConfigurerAdapter {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/")
-		.setViewName("redirect:/masg/index.html");
+		.setViewName("redirect:/index.html");
 		
 		
 		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
