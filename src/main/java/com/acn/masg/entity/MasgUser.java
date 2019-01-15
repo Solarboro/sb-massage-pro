@@ -1,5 +1,7 @@
 package com.acn.masg.entity;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,14 +16,12 @@ public class MasgUser {
 	private String username;
 	private String password;
 	private String role;
-	
 	public ObjectId get_id() {
 		return _id;
 	}
 	public void set_id(ObjectId _id) {
 		this._id = _id;
 	}
-	
 	public String getUsername() {
 		return username;
 	}
@@ -40,6 +40,7 @@ public class MasgUser {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
 	
 	
 }
